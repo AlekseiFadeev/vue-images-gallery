@@ -1,10 +1,13 @@
 <template>
+  <div class="app">
+    <div class="next" @click="GetPhotos()">Next</div>
     <div class="gallery">
-        <div v-for="image in images" :key="image.id" class="card">
-          <div class="image" :style="{ backgroundImage: 'url(' + image.urls.small + ')' }"></div>
-          <div class="author">{{ image.user.first_name }}</div>
-        </div>
+      <div v-for="image in Images" :key="image.id" class="card">
+        <div class="image" :style="{ backgroundImage: 'url(' + image.urls.small + ')' }"></div>
+        <div class="author">{{ image.user.first_name }}</div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -17,34 +20,58 @@ export default {
   name: 'Gallery',
   data() {
     return {
-      images: []
+      Images: [],
+      Page: 1,
+      PerPage: 9
     }
   },
   mounted() {
-    axios
-      .get('/photos/', {
+    this.GetPhotos()
+  },
+  methods: {
+    GetPhotos() {
+      axios
+      .get('/photos/' + '?page=' + this.Page + '&per_page=' + this.PerPage, {
         params: {
           client_id: key
         }
       })
       .then(response => {
-        this.images = response.data
-        console.log(response.data[0].urls.small)
+        this.Images = response.data
       })
       .catch(error => {
         console.log(error)
       })
+
+      this.Page = this.Page+1
+    }
   }
 }
 </script>
 
 <style scoped>
   .gallery {
-    width: 1400px;
+    width: 1100px;
     margin: 0 auto;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+  }
+
+  .next {
+    background-color: gray;
+    width: 100px;
+    height: 50px;
+    margin: 0 auto;
+    line-height: 50px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all .5s ease;
+  }
+
+  .next:hover {
+  background-color: lightgray;
+  transform: scale(1.2);
   }
 
   .card {

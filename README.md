@@ -1,5 +1,7 @@
 # vue-image-gallery
 
+![day1](./src/Screenshots/1.png)
+
 ## Project setup
 ```
 npm install
