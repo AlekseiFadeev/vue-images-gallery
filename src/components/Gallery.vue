@@ -1,19 +1,7 @@
 <template>
   <div class="app">
-    <div class="fullView" v-if="FullImageView">
-      <div class="fullView-description" @click="FullImage('')">
-        <span class="fullView-open"><a v-bind:href="'' + this.FullImageLink + ''" target="_blank">Open full in new tab</a></span>
-        <span>&#215;</span>
-      </div>
-      <div class="fullView-image" :style="{ backgroundImage: 'url(' + this.FullImageLink + ')' }"></div>
-    </div>
-    <div class="pagination">
-      <div class="prevPage" v-bind:class="{hide: this.Page == 1}" @click="GetPhotos(Page-1)">Previous</div>
-      <div class="numeric">
-        <div class="numPage" v-for="NumPage in NumPages" :key="NumPage.id" v-bind:class="{active: NumPage == Page}" @click="GetPhotos(NumPage)">{{ NumPage }}</div>
-      </div>
-      <div class="nextPage" v-bind:class="{hide: this.Page == this.TotalImages}" @click="GetPhotos(Page+1)">Next</div>
-    </div>
+    <FullImage :FullImageLink="FullImageLink" :FullImageView="FullImageView" @FullImage="FullImage"></FullImage>
+    <Pagination :NumPages="NumPages" :Page="Page" :TotalImages="TotalImages" @GetPhotos="GetPhotos"></Pagination>
     <div class="gallery">
       <div class="lds-ellipsis" v-if="!ImageLoad"><div></div><div></div><div></div><div></div></div>
       <div v-for="image in Images" :key="image.id" class="card">
@@ -29,12 +17,18 @@
 
 <script>
 import axios from 'axios'
+import FullImage from './FullImage'
+import Pagination from './Pagination'
 
 axios.defaults.baseURL = 'https://api.unsplash.com'
 const key = "9404ae5ed465bacd0a7946af14a336d213fc0211605817fce330ba83886ce9a4"
 
 export default {
   name: 'Gallery',
+  components: {
+    FullImage,
+    Pagination
+  },
   data() {
     return {
       Images: [],
@@ -55,14 +49,14 @@ export default {
       this.ImageLoad = false;
       this.Page = PageNow
 
-      axios
-      .get('/photos/' + '?page=' + this.Page + '&per_page=' + this.PerPage, {
+      axios.get('/photos/' + '?page=' + this.Page + '&per_page=' + this.PerPage, {
         params: {
           client_id: key
         }
       })
       .then(response => {
         this.Images = response.data
+        console.log(response.data);
         this.TotalImages = parseInt(response.headers['x-total'])
       })
       .catch(error => {
@@ -118,93 +112,6 @@ export default {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-  }
-
-  .fullView {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,.8);
-    z-index: 999;
-  }
-
-  .fullView-description {
-    color: lightgray;
-    font-size: 50px;
-    margin: 15px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .fullView-open {
-    font-size: 24px;
-    line-height: 50px;
-  }
-
-  .fullView-open a:visited {
-    color: lightgray;
-  }
-
-  .fullView-open a:link {
-    color: lightgray;
-  }
-
-  .fullView-image {
-    width: 90%;
-    height: 85%;
-    background-color: #fff;
-    margin: 0 auto;
-    background-position: center;
-    background-size: cover;
-    border: 10px solid #fff;
-  }
-
-  .pagination {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .nextPage, .prevPage {
-    margin: 5px 20px;
-    width: 80px;
-    height: 30px;
-    background-color: lightgray;
-    line-height: 30px;
-    cursor: pointer;
-    transition: transform .5s ease;
-  }
-
-  .hide {
-    visibility: hidden;
-  }
-
-  .nextPage:hover, .prevPage:hover {
-  background-color: gray;
-  transform: scale(1.3);
-  }
-
-  .numPage {
-    display: inline-block;
-    margin: 5px;
-    width: 30px;
-    height: 30px;
-    background-color: lightgray;
-    line-height: 30px;
-    cursor: pointer;
-    transition: all .5s ease;
-  }
-
-  .numPage:hover {
-  background-color: gray;
-  transform: scale(1.3);
-  }
-
-  .active {
-    background-color: lightblue;
-    transform: scale(1.2);
   }
 
   .card {
