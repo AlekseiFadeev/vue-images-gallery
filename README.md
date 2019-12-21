@@ -1,6 +1,6 @@
 # vue-image-gallery
 
-![day1](./src/Screenshots/1.png)
+![Front Page](./src/Screenshots/Front Page.png)
 
 ## Project setup
 ```
