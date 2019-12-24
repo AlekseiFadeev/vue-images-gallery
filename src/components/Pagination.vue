@@ -1,31 +1,30 @@
 <template>
     <div class="pagination">
-      <div class="prevPage" v-bind:class="{hide: this.Page == 1}" @click="GetPhotos(Page-1)">Previous</div>
+      <div class="prevPage" v-bind:class="{hide: this.Page == 1}" @click="getImages(Page-1)">Previous</div>
       <div class="numeric">
-        <div class="numPage" v-for="NumPage in NumPages" :key="NumPage.id" v-bind:class="{active: NumPage == Page}" @click="GetPhotos(NumPage)">{{ NumPage }}</div>
+        <div class="numPage" v-for="NumPage in getPagesNumeric" :key="NumPage.id" v-bind:class="{active: NumPage == Page}" @click="getImages(NumPage)">{{ NumPage }}</div>
       </div>
-      <div class="nextPage" v-bind:class="{hide: this.Page == this.TotalImages}" @click="GetPhotos(Page+1)">Next</div>
+      <div class="nextPage" v-bind:class="{hide: this.Page == this.TotalImages}" @click="getImages(Page+1)">Next</div>
     </div>
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex'
+
 export default {
     name: 'Pagination',
     props: {
-        NumPages: {
-            type: Array,
-            required: true
-        },
-        Page: {
-            type: Number,
-            required: true
-        },
         TotalImages: {
             type: [Number, String],
             required: true
         }
     },
+    computed: mapGetters(['allImages', 'getPagesNumeric', 'Page']),
+    mounted() {
+        this.getImages(this.Page)
+    },
     methods: {
+        ...mapActions(['getImages', 'PagesNumeric']),
         GetPhotos(PageNow) {
             this.$emit('GetPhotos', PageNow);
         }
@@ -54,8 +53,8 @@ export default {
   }
 
   .nextPage:hover, .prevPage:hover {
-  background-color: gray;
-  transform: scale(1.3);
+    background-color: gray;
+    transform: scale(1.3);
   }
 
   .numPage {
@@ -70,8 +69,8 @@ export default {
   }
 
   .numPage:hover {
-  background-color: gray;
-  transform: scale(1.3);
+    background-color: gray;
+    transform: scale(1.3);
   }
 
   .active {
