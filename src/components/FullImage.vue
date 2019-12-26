@@ -1,31 +1,35 @@
 <template>
-    <div class="fullView" v-if="FullImageView">
-      <div class="fullView-description" @click="FullImage('')">
-        <span class="fullView-open"><a v-bind:href="'' + this.FullImageLink + ''" target="_blank">Open full in new tab</a></span>
+    <div class="fullView" v-if="fullImageViewWatcher">
+      <div class="fullView-description" @click="getFullImage('')">
+        <span class="fullView-open"><a v-bind:href="'' + fullLink + ''" target="_blank">Open full in new tab</a></span>
         <span>&#215;</span>
       </div>
-      <div class="fullView-image" :style="{ backgroundImage: 'url(' + this.FullImageLink + ')' }"></div>
+      <div class="fullView-image" :style="{ backgroundImage: 'url(' + fullLink + ')' }"></div>
     </div>
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex'
+
 export default {
     name: 'fullView',
-    props: {
-        FullImageLink: {
-            type: String,
-            required: true
-        },
-        FullImageView: {
-            type: Boolean,
-            required: true
+    data() {
+        return {
+            fullImageViewWatcher: false
         }
     },
-    methods: {
-        FullImage(link) {
-            this.$emit('FullImage', link);
+    computed: {
+        ...mapGetters(['FullImage', 'getShowFullImage']),
+        fullLink() {
+            return this.$store.getters.FullImage
         }
-    }
+    },
+    methods: mapActions(['getFullImage', 'showFullImage']),
+    created() {
+        this.$store.watch(() => this.$store.getters.getShowFullImage, FullViewChange => {
+            this.fullImageViewWatcher = FullViewChange
+        })
+    },
 }
 </script>
 

@@ -4,7 +4,7 @@
       <div class="numeric">
         <div class="numPage" v-for="NumPage in getPagesNumeric" :key="NumPage.id" v-bind:class="{active: NumPage == Page}" @click="getImages(NumPage)">{{ NumPage }}</div>
       </div>
-      <div class="nextPage" v-bind:class="{hide: this.Page == this.TotalImages}" @click="getImages(Page+1)">Next</div>
+      <div class="nextPage" @click="getImages(Page+1)">Next</div>
     </div>
 </template>
 
@@ -13,12 +13,6 @@ import {mapGetters, mapActions} from 'vuex'
 
 export default {
     name: 'Pagination',
-    props: {
-        TotalImages: {
-            type: [Number, String],
-            required: true
-        }
-    },
     computed: mapGetters(['allImages', 'getPagesNumeric', 'Page']),
     mounted() {
         this.getImages(this.Page)
