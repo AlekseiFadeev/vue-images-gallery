@@ -1,15 +1,15 @@
 <template>
     <div class="fullView" v-if="fullImageViewWatcher">
-      <div class="fullView-description" @click="getFullImage('')">
+      <div class="fullView-description">
         <span class="fullView-open"><a v-bind:href="'' + fullLink + ''" target="_blank">Open full in new tab</a></span>
-        <span>&#215;</span>
+        <span class="close" @click="getFullImage('')">&#215;</span>
       </div>
       <div class="fullView-image" :style="{ backgroundImage: 'url(' + fullLink + ')' }"></div>
     </div>
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex'
+import { mapActions} from 'vuex'
 
 export default {
     name: 'fullView',
@@ -19,12 +19,11 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['FullImage', 'getShowFullImage']),
         fullLink() {
             return this.$store.getters.FullImage
         }
     },
-    methods: mapActions(['getFullImage', 'showFullImage']),
+    methods: mapActions(['getFullImage']),
     created() {
         this.$store.watch(() => this.$store.getters.getShowFullImage, FullViewChange => {
             this.fullImageViewWatcher = FullViewChange
@@ -48,7 +47,6 @@ export default {
     color: lightgray;
     font-size: 50px;
     margin: 15px;
-    cursor: pointer;
     display: flex;
     justify-content: space-between;
   }
@@ -56,6 +54,7 @@ export default {
   .fullView-open {
     font-size: 24px;
     line-height: 50px;
+    cursor: pointer;
   }
 
   .fullView-open a:visited {
@@ -64,6 +63,10 @@ export default {
 
   .fullView-open a:link {
     color: lightgray;
+  }
+
+  .close {
+    cursor: pointer;
   }
 
   .fullView-image {

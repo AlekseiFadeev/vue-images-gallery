@@ -13,16 +13,11 @@ import {mapGetters, mapActions} from 'vuex'
 
 export default {
     name: 'Pagination',
-    computed: mapGetters(['allImages', 'getPagesNumeric', 'Page']),
+    computed: mapGetters(['getPagesNumeric', 'Page']),
     mounted() {
         this.getImages(this.Page)
     },
-    methods: {
-        ...mapActions(['getImages', 'PagesNumeric']),
-        GetPhotos(PageNow) {
-            this.$emit('GetPhotos', PageNow);
-        }
-    }
+    methods: mapActions(['getImages'])
 }
 </script>
 

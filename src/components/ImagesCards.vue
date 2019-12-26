@@ -21,9 +21,7 @@ export default {
         }
     },
     computed: mapGetters(['allImages']),
-    methods: {
-        ...mapActions(['getImages', 'PagesNumeric', 'getFullImage', 'showFullImage'])
-    },
+    methods: mapActions(['getFullImage']),
     created() {
         this.$store.watch(() => this.$store.getters.getShowFullImage, FullViewChange => {
             this.fullImageViewWatcher = FullViewChange
