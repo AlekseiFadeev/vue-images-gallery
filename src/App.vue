@@ -1,20 +1,21 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" class="logo">
-    <gallery/>
+    <!-- <gallery/> -->
+    <router-view/>
   </div>
 </template>
 
-<script>
-import Gallery from './components/Gallery.vue'
+// <script>
+// import Gallery from './components/Gallery.vue'
 
-export default {
-  name: 'app',
-  components: {
-    Gallery
-  }
-}
-</script>
+// export default {
+//   name: 'app',
+//   components: {
+//     Gallery
+//   }
+// }
+// </script>
 
 <style>
 #app {

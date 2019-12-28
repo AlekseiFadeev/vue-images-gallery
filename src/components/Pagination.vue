@@ -1,10 +1,16 @@
 <template>
     <div class="pagination">
-      <div class="prevPage" v-bind:class="{hide: this.Page == 1}" @click="getImages(Page-1)">Previous</div>
+      <router-link class="prevPage" v-bind:class="{hide: this.Page == 1}" :to="{ name: 'PageNow', params: {id: Page-1} }">Previous</router-link>
       <div class="numeric">
-        <div class="numPage" v-for="NumPage in getPagesNumeric" :key="NumPage.id" v-bind:class="{active: NumPage == Page}" @click="getImages(NumPage)">{{ NumPage }}</div>
+        <router-link class="numPage" 
+          v-for="NumPage in getPagesNumeric" 
+          :key="NumPage.id" 
+          :class="{active: NumPage == Page}"
+          :to="{ name: 'PageNow', params: {id: NumPage} }">
+          {{ NumPage }}
+        </router-link>
       </div>
-      <div class="nextPage" @click="getImages(Page+1)">Next</div>
+      <router-link class="nextPage" :to="{ name: 'PageNow', params: {id: Page+1} }">Next</router-link>
     </div>
 </template>
 
@@ -14,8 +20,14 @@ import {mapGetters, mapActions} from 'vuex'
 export default {
     name: 'Pagination',
     computed: mapGetters(['getPagesNumeric', 'Page']),
-    mounted() {
-        this.getImages(this.Page)
+    created() {
+        this.getImages(1)
+    },
+    watch: {
+      $route(to) {
+        this.getImages(to.params.id)
+        console.log(to.params.id)
+      }
     },
     methods: mapActions(['getImages'])
 }
@@ -27,7 +39,13 @@ export default {
     justify-content: space-between;
   }
 
+  .nextPageWrap, .prevPageWrap {
+    width: 80px;
+    height: 30px;
+  }
+
   .nextPage, .prevPage {
+    display: block;
     margin: 5px 20px;
     width: 80px;
     height: 30px;
@@ -55,6 +73,7 @@ export default {
     line-height: 30px;
     cursor: pointer;
     transition: all .5s ease;
+    text-decoration: none;
   }
 
   .numPage:hover {
@@ -65,5 +84,13 @@ export default {
   .active {
     background-color: lightblue;
     transform: scale(1.2);
+  }
+
+  a:visited {
+    color: #2c3e50;
+  }
+
+  a:link {
+    color: #2c3e50;
   }
 </style>
