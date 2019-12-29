@@ -53,6 +53,7 @@ export default {
     line-height: 30px;
     cursor: pointer;
     transition: transform .5s ease;
+    text-decoration: none;
   }
 
   .hide {
