@@ -21,12 +21,11 @@ export default {
     name: 'Pagination',
     computed: mapGetters(['getPagesNumeric', 'Page']),
     created() {
-        this.getImages(1)
+        this.getImages(this.$route.params.id == null || this.$route.params.id < 1 ? 1 : this.$route.params.id)
     },
     watch: {
       $route(to) {
         this.getImages(to.params.id)
-        console.log(to.params.id)
       }
     },
     methods: mapActions(['getImages'])
@@ -54,6 +53,7 @@ export default {
     cursor: pointer;
     transition: transform .5s ease;
     text-decoration: none;
+    padding: 3px;
   }
 
   .hide {
@@ -68,7 +68,8 @@ export default {
   .numPage {
     display: inline-block;
     margin: 5px;
-    width: 30px;
+    padding: 3px;
+    min-width: 30px;
     height: 30px;
     background-color: lightgray;
     line-height: 30px;
